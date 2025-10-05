@@ -25,16 +25,19 @@ public class LibraryStorage {
 
     public Library loadOrCreate() {
         if (!Files.exists(storagePath)) {
-            return new Library();
+            return newLibraryInstance();
         }
         try (ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(storagePath))) {
             Object obj = ois.readObject();
             if (obj instanceof Library) {
-                return (Library) obj;
+                Library library = (Library) obj;
+                library.syncCounters();
+                return library;
             }
             throw new IOException("Unexpected data format inside " + storagePath);
         } catch (IOException | ClassNotFoundException ex) {
-            throw new IllegalStateException("Failed to load library data", ex);
+            System.err.println("Warning: failed to load existing library data: " + ex.getMessage());
+            return newLibraryInstance();
         }
     }
 
@@ -47,5 +50,11 @@ public class LibraryStorage {
         } catch (IOException ex) {
             throw new IllegalStateException("Failed to save library data", ex);
         }
+    }
+
+    private Library newLibraryInstance() {
+        Library library = new Library();
+        library.syncCounters();
+        return library;
     }
 }

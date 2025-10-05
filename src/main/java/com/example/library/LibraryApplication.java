@@ -117,7 +117,7 @@ public class LibraryApplication {
 
     private void handleEditBook() {
         System.out.println("-- Edit Book --");
-        String bookId = prompt("Book ID");
+        int bookId = promptInt("Book ID", 1);
         Optional<Book> existing = library.findBookById(bookId);
         if (existing.isEmpty()) {
             System.out.println("Book not found.");
@@ -135,7 +135,7 @@ public class LibraryApplication {
 
     private void handleRemoveBook() {
         System.out.println("-- Delete Book --");
-        String bookId = prompt("Book ID");
+        int bookId = promptInt("Book ID", 1);
         if (library.removeBook(bookId)) {
             persist();
             System.out.println("Book removed.");
@@ -151,7 +151,7 @@ public class LibraryApplication {
             System.out.println("No books registered.");
             return;
         }
-        books.forEach(book -> System.out.printf("ID: %s | %s%n", book.getId(), book));
+        books.forEach(book -> System.out.printf("ID: %d | %s%n", book.getId(), book));
     }
 
     private void handleSearchBooks() {
@@ -162,7 +162,7 @@ public class LibraryApplication {
             System.out.println("No books match your search.");
             return;
         }
-        results.forEach(book -> System.out.printf("ID: %s | %s%n", book.getId(), book));
+        results.forEach(book -> System.out.printf("ID: %d | %s%n", book.getId(), book));
     }
 
     private void handleAddUser() {
@@ -188,7 +188,7 @@ public class LibraryApplication {
 
     private void handleEditUser() {
         System.out.println("-- Edit User --");
-        String userId = prompt("User ID");
+        int userId = promptInt("User ID", 1);
         Optional<User> existing = library.findUser(userId);
         if (existing.isEmpty()) {
             System.out.println("User not found.");
@@ -204,7 +204,7 @@ public class LibraryApplication {
 
     private void handleRemoveUser() {
         System.out.println("-- Delete User --");
-        String userId = prompt("User ID");
+        int userId = promptInt("User ID", 1);
         if (library.removeUser(userId)) {
             persist();
             System.out.println("User removed.");
@@ -220,12 +220,12 @@ public class LibraryApplication {
             System.out.println("No users registered.");
             return;
         }
-        users.forEach(user -> System.out.printf("ID: %s | %s%n", user.getId(), user));
+        users.forEach(user -> System.out.printf("ID: %d | %s%n", user.getId(), user));
     }
 
     private void handleBorrowBook() {
         System.out.println("-- Borrow Book --");
-        String userId = prompt("User ID");
+        int userId = promptInt("User ID", 1);
         String isbn = prompt("Book ISBN");
         if (library.borrowBookByIsbn(userId, isbn)) {
             persist();
@@ -237,7 +237,7 @@ public class LibraryApplication {
 
     private void handleReturnBook() {
         System.out.println("-- Return Book --");
-        String userId = prompt("User ID");
+        int userId = promptInt("User ID", 1);
         String isbn = prompt("Book ISBN");
         if (library.returnBookByIsbn(userId, isbn)) {
             persist();
@@ -254,7 +254,7 @@ public class LibraryApplication {
             System.out.println("No active loans.");
             return;
         }
-        loans.forEach(loan -> System.out.printf("User: %s | Book: %s | Loaned: %s | Due: %s%n",
+        loans.forEach(loan -> System.out.printf("User: %d | Book: %d | Loaned: %s | Due: %s%n",
                 loan.getUserId(), loan.getBookId(), loan.getLoanDate(), loan.getDueDate()));
     }
 

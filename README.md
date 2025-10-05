@@ -8,6 +8,7 @@ A console-based library management system built with core Java and OOP principle
 - Borrowing workflow: enforce copy availability and per-role loan limits (students up to 3, professors up to 5).
 - Track active loans with automatic due dates (14 days for students, 28 days for professors).
 - Persist all data to `data/library.dat` so the catalogue and members survive restarts.
+- Auto-incrementing numeric IDs for books and users to keep references simple.
 
 ## Project Structure
 ```
@@ -32,4 +33,4 @@ From the menu you can perform all library operations. Choose `13` to save and ex
 ## Data Files
 - `data/library.dat`: binary serialized snapshot of the entire library state.
 
-Delete this file if you need to reset the system to a blank slate.
+If you previously ran a version that used UUID identifiers, the program will automatically reset the store and start fresh the next time you run it.

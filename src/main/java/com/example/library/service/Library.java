@@ -195,6 +195,11 @@ public class Library implements Serializable {
         return Collections.unmodifiableList(loanRecords);
     }
 
+    public void syncCounters() {
+        nextBookId = booksById.keySet().stream().mapToInt(Integer::intValue).max().orElse(0) + 1;
+        nextUserId = usersById.keySet().stream().mapToInt(Integer::intValue).max().orElse(0) + 1;
+    }
+
     private LocalDate calculateDueDate(User user) {
         int loanDuration = user instanceof Professor ? 28 : 14;
         return LocalDate.now().plusDays(loanDuration);
