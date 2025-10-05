@@ -110,7 +110,8 @@ public class LibraryApplication {
         String author = prompt("Author");
         String isbn = prompt("ISBN");
         int totalCopies = promptInt("Total copies", 1);
-        Book book = library.addBook(title, author, isbn, totalCopies);
+        String description = promptOptional("Description (optional)");
+        Book book = library.addBook(title, author, isbn, totalCopies, description);
         persist();
         System.out.println("Book added with ID: " + book.getId());
     }
@@ -128,7 +129,8 @@ public class LibraryApplication {
         String author = promptDefault("Author", book.getAuthor());
         String isbn = promptDefault("ISBN", book.getIsbn());
         int totalCopies = promptIntDefault("Total copies", book.getTotalCopies(), 1);
-        library.updateBook(bookId, title, author, isbn, totalCopies);
+        String description = promptDefault("Description", book.getDescription());
+        library.updateBook(bookId, title, author, isbn, totalCopies, description);
         persist();
         System.out.println("Book updated.");
     }
@@ -272,6 +274,11 @@ public class LibraryApplication {
         System.out.printf("%s (%s): ", label, current);
         String input = scanner.nextLine().trim();
         return input.isEmpty() ? current : input;
+    }
+
+    private String promptOptional(String label) {
+        System.out.print(label + ": ");
+        return scanner.nextLine().trim();
     }
 
     private int promptInt(String label, int minInclusive) {

@@ -1,13 +1,12 @@
 package com.example.library.model;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * Represents a book in the library catalogue.
  */
 public class Book implements Serializable {
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
 
     private final int id;
     private String title;
@@ -15,17 +14,19 @@ public class Book implements Serializable {
     private String isbn;
     private int totalCopies;
     private int availableCopies;
+    private String description;
 
-    public Book(int id, String title, String author, String isbn, int totalCopies) {
+    public Book(int id, String title, String author, String isbn, int totalCopies, String description) {
         if (totalCopies < 0) {
             throw new IllegalArgumentException("Total copies cannot be negative");
         }
         this.id = id;
-        this.title = Objects.requireNonNull(title, "title");
-        this.author = Objects.requireNonNull(author, "author");
-        this.isbn = Objects.requireNonNull(isbn, "isbn");
+        this.title = requireNonBlank(title, "title");
+        this.author = requireNonBlank(author, "author");
+        this.isbn = requireNonBlank(isbn, "isbn");
         this.totalCopies = totalCopies;
         this.availableCopies = totalCopies;
+        this.description = sanitizeDescription(description);
     }
 
     public int getId() {
@@ -37,7 +38,7 @@ public class Book implements Serializable {
     }
 
     public void setTitle(String title) {
-        this.title = Objects.requireNonNull(title, "title");
+        this.title = requireNonBlank(title, "title");
     }
 
     public String getAuthor() {
@@ -45,7 +46,7 @@ public class Book implements Serializable {
     }
 
     public void setAuthor(String author) {
-        this.author = Objects.requireNonNull(author, "author");
+        this.author = requireNonBlank(author, "author");
     }
 
     public String getIsbn() {
@@ -53,7 +54,7 @@ public class Book implements Serializable {
     }
 
     public void setIsbn(String isbn) {
-        this.isbn = Objects.requireNonNull(isbn, "isbn");
+        this.isbn = requireNonBlank(isbn, "isbn");
     }
 
     public int getTotalCopies() {
@@ -81,6 +82,14 @@ public class Book implements Serializable {
             throw new IllegalArgumentException("Available copies must be between 0 and total copies");
         }
         this.availableCopies = availableCopies;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = sanitizeDescription(description);
     }
 
     public int getBorrowedCopies() {
@@ -124,6 +133,21 @@ public class Book implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("%s by %s (ISBN: %s) - Available: %d/%d", title, author, isbn, availableCopies, totalCopies);
+        String base = String.format("%s by %s (ISBN: %s) - Available: %d/%d", title, author, isbn, availableCopies, totalCopies);
+        if (description.isBlank()) {
+            return base;
+        }
+        return base + " | " + description;
+    }
+
+    private String requireNonBlank(String value, String field) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException(field + " cannot be blank");
+        }
+        return value.trim();
+    }
+
+    private String sanitizeDescription(String value) {
+        return value == null ? "" : value.trim();
     }
 }

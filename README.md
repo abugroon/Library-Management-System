@@ -4,6 +4,7 @@ A console-based library management system built with core Java and OOP principle
 
 ## Features
 - Manage books: add, edit, delete, list, and search by keyword.
+- Capture optional descriptions for each book and include them in search results.
 - Manage members: add, edit, delete, and list students or professors.
 - Borrowing workflow: enforce copy availability and per-role loan limits (students up to 3, professors up to 5).
 - Track active loans with automatic due dates (14 days for students, 28 days for professors).
@@ -33,4 +34,4 @@ From the menu you can perform all library operations. Choose `13` to save and ex
 ## Data Files
 - `data/library.dat`: binary serialized snapshot of the entire library state.
 
-If you previously ran a version that used UUID identifiers, the program will automatically reset the store and start fresh the next time you run it.
+If you previously ran a version that used an older serialization format, the program will automatically reset the store and start fresh the next time you run it.

@@ -31,18 +31,18 @@ public class Library implements Serializable {
     private int nextBookId = 1;
     private int nextUserId = 1;
 
-    public Book addBook(String title, String author, String isbn, int totalCopies) {
+    public Book addBook(String title, String author, String isbn, int totalCopies, String description) {
         String normalizedIsbn = normalizeIsbn(isbn);
         if (booksByIsbn.containsKey(normalizedIsbn)) {
             throw new IllegalArgumentException("Book with this ISBN already exists");
         }
-        Book book = new Book(nextBookId++, title, author, normalizedIsbn, totalCopies);
+        Book book = new Book(nextBookId++, title, author, normalizedIsbn, totalCopies, description);
         booksById.put(book.getId(), book);
         booksByIsbn.put(normalizedIsbn, book);
         return book;
     }
 
-    public Optional<Book> updateBook(int bookId, String title, String author, String isbn, int totalCopies) {
+    public Optional<Book> updateBook(int bookId, String title, String author, String isbn, int totalCopies, String description) {
         Book book = booksById.get(bookId);
         if (book == null) {
             return Optional.empty();
@@ -57,6 +57,7 @@ public class Library implements Serializable {
         book.setAuthor(author);
         book.setIsbn(normalizedIsbn);
         book.setTotalCopies(totalCopies);
+        book.setDescription(description);
         booksByIsbn.put(normalizedIsbn, book);
         return Optional.of(book);
     }
@@ -93,7 +94,8 @@ public class Library implements Serializable {
         return booksById.values().stream()
                 .filter(book -> book.getTitle().toLowerCase().contains(lower)
                         || book.getAuthor().toLowerCase().contains(lower)
-                        || book.getIsbn().toLowerCase().contains(lower))
+                        || book.getIsbn().toLowerCase().contains(lower)
+                        || book.getDescription().toLowerCase().contains(lower))
                 .sorted(Comparator.comparing(Book::getTitle))
                 .collect(Collectors.toList());
     }
